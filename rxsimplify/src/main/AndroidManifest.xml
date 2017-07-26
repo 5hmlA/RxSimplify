@@ -23,6 +23,10 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/RxPicker.AppTheme"/>
+        <activity
+            android:name="yun.rx_activity_result2.HolderActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.Transparent"/>
 
         <provider
             android:name="yun.caimuhao.rxpicker.utils.RxPickerProvider"

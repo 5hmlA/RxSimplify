@@ -20,13 +20,10 @@ import android.app.FragmentManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
 
 public class RxPermissions {
 
@@ -69,34 +66,34 @@ public class RxPermissions {
      * to ask the user if he allows the permissions.
      */
     @SuppressWarnings("WeakerAccess")
-    public Observable.Transformer<Object, Boolean> ensure(final String... permissions) {
-        return new Observable.Transformer<Object, Boolean>() {
-            @Override
-            public Observable<Boolean> call(Observable<Object> o) {
-                return request(o, permissions)
-                        // Transform Observable<Permission> to Observable<Boolean>
-                        .buffer(permissions.length)
-                        .flatMap(new Func1<List<Permission>, Observable<Boolean>>() {
-                            @Override
-                            public Observable<Boolean> call(List<Permission> permissions) {
-                                if (permissions.isEmpty()) {
-                                    // Occurs during orientation change, when the subject receives onComplete.
-                                    // In that case we don't want to propagate that empty list to the
-                                    // subscriber, only the onComplete.
-                                    return Observable.empty();
-                                }
-                                // Return true if all permissions are granted.
-                                for (Permission p : permissions) {
-                                    if (!p.granted) {
-                                        return Observable.just(false);
-                                    }
-                                }
-                                return Observable.just(true);
-                            }
-                        });
-            }
-        };
-    }
+    //public Observable.trans<Object, Boolean> ensure(final String... permissions) {
+    //    return new Observable.Transformer<Object, Boolean>() {
+    //        @Override
+    //        public Observable<Boolean> call(Observable<Object> o) {
+    //            return request(o, permissions)
+    //                    // Transform Observable<Permission> to Observable<Boolean>
+    //                    .buffer(permissions.length)
+    //                    .flatMap(new Func1<List<Permission>, Observable<Boolean>>() {
+    //                        @Override
+    //                        public Observable<Boolean> call(List<Permission> permissions) {
+    //                            if (permissions.isEmpty()) {
+    //                                // Occurs during orientation change, when the subject receives onComplete.
+    //                                // In that case we don't want to propagate that empty list to the
+    //                                // subscriber, only the onComplete.
+    //                                return Observable.empty();
+    //                            }
+    //                            // Return true if all permissions are granted.
+    //                            for (Permission p : permissions) {
+    //                                if (!p.granted) {
+    //                                    return Observable.just(false);
+    //                                }
+    //                            }
+    //                            return Observable.just(true);
+    //                        }
+    //                    });
+    //        }
+    //    };
+    //}
 
     /**
      * Map emitted items from the source observable into {@link Permission} objects for each
