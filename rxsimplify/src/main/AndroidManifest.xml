@@ -1,5 +1,6 @@
-<manifest package="yun.picker.simplify"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="yun.picker.simplify">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -8,12 +9,10 @@
     <application
         android:label="@string/app_name"
         android:supportsRtl="true">
-
         <activity
             android:name="yun.caimuhao.rxpicker.ui.RxPickerActivity"
             android:launchMode="singleTop"
             android:theme="@style/RxPicker.AppTheme"/>
-
         <activity
             android:name="yun.caimuhao.rxpicker.ui.PreviewActivity"
             android:launchMode="singleTop"
@@ -38,6 +37,7 @@
                 android:resource="@xml/file_path"/>
         </provider>
 
+        <activity android:name="yun.transfer.RxTransferActivity"></activity>
     </application>
 
 </manifest>

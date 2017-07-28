@@ -24,6 +24,7 @@ import yun.caimuhao.rxpicker.utils.CameraHelper;
 import yun.caimuhao.rxpicker.utils.PickerConfig;
 import yun.caimuhao.rxpicker.utils.RxPickerImageLoader;
 import yun.caimuhao.rxpicker.utils.RxPickerManager;
+import yun.tbruyelle.rxpermissions.RxPermissions;
 
 import static yun.caimuhao.rxpicker.ui.fragment.PickerFragment.CAMERA_REQUEST;
 import static yun.caimuhao.rxpicker.ui.fragment.ResultHandlerFragment.CAMERA_PERMISSION;

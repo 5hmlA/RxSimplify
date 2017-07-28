@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="yun.caimuhao.sample">
 
-
+  <uses-permission android:name="android.permission.CALL_PHONE"/>
   <application
       android:name="yun.caimuhao.sample.App"
       android:allowBackup="true"

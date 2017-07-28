@@ -16,6 +16,7 @@
 
 package yun.rx_activity_result2;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -64,7 +65,7 @@ public class HolderActivity extends Activity {
         }
     }
 
-    private void startIntentSender(RequestIntentSender requestIntentSender) {
+    @SuppressLint("NewApi") private void startIntentSender(RequestIntentSender requestIntentSender) {
         try {
             startIntentSenderForResult(requestIntentSender.getIntentSender(), 0,
                     requestIntentSender.getFillInIntent(), requestIntentSender.getFlagsMask(),
