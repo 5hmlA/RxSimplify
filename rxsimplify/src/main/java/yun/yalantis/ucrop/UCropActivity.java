@@ -82,12 +82,9 @@ public class UCropActivity extends AppCompatActivity {
     private int mStatusBarColor;
     private int mActiveWidgetColor;
     private int mToolbarWidgetColor;
-    @ColorInt
-    private int mRootViewBackgroundColor;
-    @DrawableRes
-    private int mToolbarCancelDrawable;
-    @DrawableRes
-    private int mToolbarCropDrawable;
+    @ColorInt private int mRootViewBackgroundColor;
+    @DrawableRes private int mToolbarCancelDrawable;
+    @DrawableRes private int mToolbarCropDrawable;
     private int mLogoColor;
 
     private boolean mShowBottomControls;
@@ -159,7 +156,7 @@ public class UCropActivity extends AppCompatActivity {
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_crop) {
-            cropAndSaveImage();
+            cropAndSaveImage(null);
         }
         else if (item.getItemId() == android.R.id.home) {
             onBackPressed();
@@ -353,24 +350,26 @@ public class UCropActivity extends AppCompatActivity {
         setStatusBarColor(mStatusBarColor);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            // Set all of the Toolbar coloring
+            toolbar.setBackgroundColor(mToolbarColor);
+            toolbar.setTitleTextColor(mToolbarWidgetColor);
 
-        // Set all of the Toolbar coloring
-        toolbar.setBackgroundColor(mToolbarColor);
-        toolbar.setTitleTextColor(mToolbarWidgetColor);
+            final TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+            toolbarTitle.setTextColor(mToolbarWidgetColor);
+            toolbarTitle.setText(mToolbarTitle);
 
-        final TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        toolbarTitle.setTextColor(mToolbarWidgetColor);
-        toolbarTitle.setText(mToolbarTitle);
+            // Color buttons inside the Toolbar
+            Drawable stateButtonDrawable = ContextCompat.getDrawable(this, R.drawable.ucrop_ic_cross)
+                                                        .mutate();
+            stateButtonDrawable.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
+            toolbar.setNavigationIcon(stateButtonDrawable);
 
-        // Color buttons inside the Toolbar
-        Drawable stateButtonDrawable = ContextCompat.getDrawable(this, R.drawable.ucrop_ic_cross).mutate();
-        stateButtonDrawable.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
-        toolbar.setNavigationIcon(stateButtonDrawable);
-
-        setSupportActionBar(toolbar);
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(false);
+            setSupportActionBar(toolbar);
+            final ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayShowTitleEnabled(false);
+            }
         }
     }
 
@@ -672,10 +671,10 @@ public class UCropActivity extends AppCompatActivity {
     }
 
 
-    protected void cropAndSaveImage() {
+    public void cropAndSaveImage(View view) {
         mBlockingView.setClickable(true);
         mShowLoader = true;
-        supportInvalidateOptionsMenu();
+        if (view == null) supportInvalidateOptionsMenu();
 
         mGestureCropImageView.cropAndSaveImage(mCompressFormat, mCompressQuality, new BitmapCropCallback() {
 
@@ -709,6 +708,7 @@ public class UCropActivity extends AppCompatActivity {
     protected void setResultError(Throwable throwable) {
         setResult(UCrop.RESULT_ERROR, new Intent().putExtra(UCrop.EXTRA_ERROR, throwable));
     }
+
 
     protected void closeActivity() {
         finish();

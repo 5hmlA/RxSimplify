@@ -1,14 +1,18 @@
 package yun.caimuhao.sample;
 
-import android.Manifest;
+import android.app.AppOpsManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +27,6 @@ import yun.caimuhao.rxpicker.bean.ImageItem;
 import yun.caimuhao.rxpicker.utils.CameraHelper;
 import yun.caimuhao.rxpicker.utils.RxPickerManager;
 import yun.caimuhao.rxpicker.widget.DividerGridItemDecoration;
-import yun.tbruyelle.rxpermissions.RxPermissions;
 import yun.yalantis.ucrop.UCrop;
 
 import static yun.caimuhao.rxpicker.ui.fragment.PickerFragment.CAMERA_REQUEST;
@@ -70,8 +73,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //        adapter.setData(imageItems);
     }
-
-
+    //到底有没有某项权限，怎么检测呢，基于以往 Android 在这方面的不精细，
+    // 很多人都不会太在意这方面的逻辑判断，新出的6.0系统也只是基于targetSdkVersion 23以上的app的判断，
+    // 包括6.0以下的版本，怎样判断是不是被安全中心这种禁掉了呢，这就需要 AppOpsManager 这个类了
+    public void check(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+            int checkResult = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_FINE_LOCATION, Binder.getCallingUid(), context.getPackageName());
+            if (checkResult == AppOpsManager.MODE_ALLOWED) {
+                Toast.makeText(context, "有权限", Toast.LENGTH_LONG).show();
+                Log.e("jijiaxin", "有权限");
+            }
+            else if (checkResult == AppOpsManager.MODE_IGNORED) {
+                // TODO: 只需要依此方法判断退出就可以了，这时是没有权限的。
+                Toast.makeText(context, "被禁止了", Toast.LENGTH_LONG).show();
+                Log.e("jijiaxin", "被禁止了");
+            }
+            else if (checkResult == AppOpsManager.MODE_ERRORED) {
+                Toast.makeText(context, "出错了", Toast.LENGTH_LONG).show();
+                Log.e("jijiaxin", "出错了");
+            }
+            else if (checkResult == 4) {
+                Toast.makeText(context, "权限需要询问", Toast.LENGTH_LONG).show();
+                Log.e("jijiaxin", "权限需要询问");
+            }
+        }
+    }
     @Override public void onClick(View v) {
         if (tvSingleImg == v) {
             //RxPermissions.care(this)
@@ -82,8 +109,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //                 }
             //             });
             adapter.setData(new ArrayList<ImageItem>());
-
-            RxPicker.of().crop(true).takePic(false).start(this).subscribe(new Consumer<List<ImageItem>>() {
+            //RxPickerManager.getInstance().setCropOptions();
+            RxPicker.of().crop(true).takePic(false).start(this).subscribe(new Consumer<List<ImageItem>>
+                    () {
                 @Override public void accept(@NonNull List<ImageItem> imageItems) throws Exception {
                     adapter.setData(imageItems);
                 }
