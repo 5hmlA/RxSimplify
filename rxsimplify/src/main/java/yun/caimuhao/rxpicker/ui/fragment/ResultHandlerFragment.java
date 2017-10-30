@@ -59,9 +59,9 @@ public class ResultHandlerFragment extends Fragment {
         if(requestCode == REQUEST_CODE && data != null) {
             mResult = RxPickerManager.getInstance().getResult(data);
 
-            if(RxPickerManager.getInstance().isCrop() && mResult.size() == 1) {
+            if(RxPickerManager.getInstance().isCrop()) {
                 //执行剪切任务
-                startCropActivity(mResult.get(0));
+                handleCropResult(data);
             }else {
                 resultSubject.onNext(mResult);
             }
@@ -87,7 +87,9 @@ public class ResultHandlerFragment extends Fragment {
     }
 
     private void handleTakeAphoto(Intent data){
+        Uri data1 = data.getData();
         File file = CameraHelper.getTakeImageFile();
+        CameraHelper.scanPic(getActivity(), file);
         ImageItem item = new ImageItem(0, file.getAbsolutePath(), file.getName(), System.currentTimeMillis());
         mResult = new ArrayList<>();
         mResult.add(item);

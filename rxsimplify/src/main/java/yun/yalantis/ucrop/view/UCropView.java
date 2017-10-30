@@ -16,49 +16,55 @@ public class UCropView extends FrameLayout {
     private final GestureCropImageView mGestureCropImageView;
     private final OverlayView mViewOverlay;
 
-    public UCropView(Context context, AttributeSet attrs) {
+    public UCropView(Context context ){
+        this(context, null, 0);
+    }
+
+    public UCropView(Context context, AttributeSet attrs){
         this(context, attrs, 0);
     }
 
-    public UCropView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public UCropView(Context context, AttributeSet attrs, int defStyleAttr){
         super(context, attrs, defStyleAttr);
 
         LayoutInflater.from(context).inflate(yun.picker.simplify.R.layout.ucrop_view, this, true);
-        mGestureCropImageView = (GestureCropImageView) findViewById(yun.picker.simplify.R.id.image_view_crop);
-        mViewOverlay = (OverlayView) findViewById(yun.picker.simplify.R.id.view_overlay);
-
+        mGestureCropImageView = (GestureCropImageView)findViewById(yun.picker.simplify.R.id.image_view_crop);
+        mViewOverlay = (OverlayView)findViewById(yun.picker.simplify.R.id.view_overlay);
+        if(getPaddingBottom() != 0) {
+            mViewOverlay.setPadding(mViewOverlay.getPaddingLeft(), mViewOverlay.getPaddingTop(),
+                    mViewOverlay.getPaddingRight(), getPaddingBottom());
+            setPadding(0, 0, 0, 0);
+        }
         TypedArray a = context.obtainStyledAttributes(attrs, yun.picker.simplify.R.styleable.ucrop_UCropView);
         mViewOverlay.processStyledAttributes(a);
         mGestureCropImageView.processStyledAttributes(a);
         a.recycle();
-
-
         mGestureCropImageView.setCropBoundsChangeListener(new CropBoundsChangeListener() {
             @Override
-            public void onCropAspectRatioChanged(float cropRatio) {
+            public void onCropAspectRatioChanged(float cropRatio){
                 mViewOverlay.setTargetAspectRatio(cropRatio);
             }
         });
         mViewOverlay.setOverlayViewChangeListener(new OverlayViewChangeListener() {
             @Override
-            public void onCropRectUpdated(RectF cropRect) {
+            public void onCropRectUpdated(RectF cropRect){
                 mGestureCropImageView.setCropRect(cropRect);
             }
         });
     }
 
     @Override
-    public boolean shouldDelayChildPressedState() {
+    public boolean shouldDelayChildPressedState(){
         return false;
     }
 
     @NonNull
-    public GestureCropImageView getCropImageView() {
+    public GestureCropImageView getCropImageView(){
         return mGestureCropImageView;
     }
 
     @NonNull
-    public OverlayView getOverlayView() {
+    public OverlayView getOverlayView(){
         return mViewOverlay;
     }
 

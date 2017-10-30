@@ -6,6 +6,12 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:checkboxStyle">@style/customcheck</item>
+    <!--<item name="android:checkboxStyle">@drawable/customcheck</item>-->
+  </style>
+
+  <style name="customcheck" parent="Widget.AppCompat.CompoundButton.CheckBox">
+    <item name="android:button">@drawable/customcheck</item>
   </style>
 
 </resources>

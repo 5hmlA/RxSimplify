@@ -58,6 +58,9 @@ public class RxPickerManager {
     public void showCamera(boolean showCamera){
         config.setShowCamera(showCamera);
     }
+    public void setOrignSelected(List<ImageItem> orignSelected){
+        config.setOrignSelected(orignSelected);
+    }
 
     public void limit(int minValue, int maxValue){
         config.setLimit(minValue, maxValue);

@@ -59,4 +59,5 @@ public class RxPickerActivity extends AppCompatActivity {
         }
         getFragmentManager().beginTransaction().replace(R.id.fl_container, fragment, tag).commitAllowingStateLoss();
     }
+
 }

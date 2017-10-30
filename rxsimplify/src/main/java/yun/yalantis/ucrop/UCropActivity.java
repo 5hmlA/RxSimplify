@@ -65,6 +65,10 @@ public class UCropActivity extends AppCompatActivity {
     public static final int ROTATE = 2;
     public static final int ALL = 3;
 
+    public void cancel(View view){
+        finish();
+    }
+
     @IntDef({ NONE, SCALE, ROTATE, ALL }) @Retention(RetentionPolicy.SOURCE) public @interface GestureTypes {
 
     }

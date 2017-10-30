@@ -17,17 +17,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
-import io.reactivex.functions.Consumer;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
 import yun.caimuhao.rxpicker.RxPicker;
 import yun.caimuhao.rxpicker.bean.ImageItem;
 import yun.caimuhao.rxpicker.utils.CameraHelper;
 import yun.caimuhao.rxpicker.utils.RxPickerManager;
 import yun.caimuhao.rxpicker.widget.DividerGridItemDecoration;
 import yun.yalantis.ucrop.UCrop;
+import yun.yalantis.ucrop.view.GestureWraper;
 
 import static yun.caimuhao.rxpicker.ui.fragment.PickerFragment.CAMERA_REQUEST;
 
@@ -52,12 +57,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         tvMultiImg = (TextView) findViewById(R.id.btn_multi_img);
         tvMultiImg.setOnClickListener(this);
+        GestureWraper gestureWraper = new GestureWraper(findViewById(R.id.iv));
 
         adapter = new PickerAdapter();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.addItemDecoration(new DividerGridItemDecoration(this));
         recyclerView.setAdapter(adapter);
+//        Glide.with(this).load("http://www.zbjuran.com/uploads/allimg/170725/1506053064-0.jpg").
+//                into((TransformImageView)findViewById(R.id.tfiv));
+        Glide.with(this).load("https://avatars0.githubusercontent.com/u/9412501?s=460&v=4").placeholder(R.mipmap.ic_launcher).
+                into((ImageView)findViewById(R.id.iv));
     }
 
 
@@ -110,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //             });
             adapter.setData(new ArrayList<ImageItem>());
             //RxPickerManager.getInstance().setCropOptions();
-            RxPicker.of().crop(true).takePic(false).start(this).subscribe(new Consumer<List<ImageItem>>
+            RxPicker.of().crop(true).takePic(false).camera(false).start(this).subscribe(new Consumer<List<ImageItem>>
                     () {
                 @Override public void accept(@NonNull List<ImageItem> imageItems) throws Exception {
                     adapter.setData(imageItems);
@@ -119,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
             if (tvMultiImg == v) {
-                RxPicker.of().crop(true).takePic(true).start(this).subscribe(new Consumer<List<ImageItem>>() {
+                RxPicker.of().single(false).crop(false).takePic(false).camera(true).start(this).subscribe(new
+                                                                                                     Consumer<List<ImageItem>>
+                        () {
                     @Override public void accept(@NonNull List<ImageItem> imageItems) throws Exception {
                         adapter.setData(imageItems);
                     }

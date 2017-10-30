@@ -12,6 +12,7 @@
         <activity
             android:name="yun.caimuhao.rxpicker.ui.RxPickerActivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/RxPicker.AppTheme"/>
         <activity
             android:name="yun.caimuhao.rxpicker.ui.PreviewActivity"
@@ -19,7 +20,6 @@
             android:theme="@style/RxPicker.AppTheme"/>
         <activity
             android:name="yun.yalantis.ucrop.UCropActivity"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/RxPicker.AppTheme"/>
         <activity

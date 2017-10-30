@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/RxSimplify-master.iml" filepath="$PROJECT_DIR$/RxSimplify-master.iml" />
+      <module fileurl="file://G:\ITworld\as\0picture\RxSimplify-master\RxSimplify-master.iml" filepath="G:\ITworld\as\0picture\RxSimplify-master\RxSimplify-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://G:\ITworld\as\0picture\RxSimplify-master\app\app.iml" filepath="G:\ITworld\as\0picture\RxSimplify-master\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxsimplify/rxsimplify.iml" filepath="$PROJECT_DIR$/rxsimplify/rxsimplify.iml" />
+      <module fileurl="file://G:\ITworld\as\0picture\RxSimplify-master\rxsimplify\rxsimplify.iml" filepath="G:\ITworld\as\0picture\RxSimplify-master\rxsimplify\rxsimplify.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
+      <module fileurl="file://G:\ITworld\as\0picture\RxSimplify-master\sample\sample.iml" filepath="G:\ITworld\as\0picture\RxSimplify-master\sample\sample.iml" />
+    </modules>
+  </component>
+</project>

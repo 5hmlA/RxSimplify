@@ -75,4 +75,23 @@ public class ImageItem implements Serializable, Comparable<ImageItem> {
     } else if (time < -Integer.MAX_VALUE) return -Integer.MAX_VALUE;
     return (int) time;
   }
+
+  @Override
+  public boolean equals(Object o){
+    if(this == o) {
+      return true;
+    }
+    if(o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ImageItem imageItem = (ImageItem)o;
+
+    return path != null ? path.equals(imageItem.path) : imageItem.path == null;
+  }
+
+  @Override
+  public int hashCode(){
+    return path != null ? path.hashCode() : 0;
+  }
 }

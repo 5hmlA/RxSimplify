@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -41,6 +42,7 @@ import yun.caimuhao.rxpicker.utils.T;
 import yun.caimuhao.rxpicker.widget.DividerGridItemDecoration;
 import yun.caimuhao.rxpicker.widget.PopWindowManager;
 import yun.picker.simplify.R;
+import yun.yalantis.ucrop.UCrop;
 
 /**
  * @author Smile
@@ -67,6 +69,9 @@ public class PickerFragment extends AbstractFragment<PickerFragmentPresenter> im
     private PickerConfig config;
     private Disposable folderClicksubscribe;
     private Disposable imageItemsubscribe;
+    private static final String SAMPLE_CROPPED_IMAGE_NAME = "CropImage.png";
+    private ImageItem mImageCroped;
+    private ImageView mImgToggle;
 
     public static PickerFragment newInstance() {
         return new PickerFragment();
@@ -81,7 +86,8 @@ public class PickerFragment extends AbstractFragment<PickerFragmentPresenter> im
     protected void initView(View view) {
         config = RxPickerManager.getInstance().getConfig();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        title = (TextView) view.findViewById(R.id.title);
+        title = (TextView) view.findViewById(R.id.rxp_title);
+        mImgToggle = (ImageView) view.findViewById(R.id.rxp_toggimg);
         ivSelectPreview = (ImageView) view.findViewById(R.id.iv_select_preview);
         ivSelectPreview.setOnClickListener(this);
         tvSelectOk = (TextView) view.findViewById(R.id.iv_select_ok);
@@ -122,11 +128,28 @@ public class PickerFragment extends AbstractFragment<PickerFragmentPresenter> im
         imageItemsubscribe = RxBus.singleton().toObservable(ImageItem.class).subscribe(new Consumer<ImageItem>() {
             @Override
             public void accept(@io.reactivex.annotations.NonNull ImageItem imageItem) throws Exception {
-                ArrayList<ImageItem> data = new ArrayList<>();
-                data.add(imageItem);
-                handleResult(data);
+                if(!RxPickerManager.getInstance().isCrop()) {
+                    ArrayList<ImageItem> data = new ArrayList<>();
+                    data.add(imageItem);
+                    handleResult(data);
+                }else {
+                    startCropActivity(imageItem);
+                }
             }
         });
+    }
+
+    private void startCropActivity(@NonNull ImageItem path){
+        mImageCroped = path;
+        String destinationFileName = SAMPLE_CROPPED_IMAGE_NAME;
+        //        Uri input = Uri.parse(path);
+        Uri input = Uri.fromFile(new File(path.getPath()));
+        File externalCacheDir = getActivity().getExternalCacheDir();
+        if(externalCacheDir == null) {
+            externalCacheDir = getActivity().getCacheDir();
+        }
+        UCrop uCrop = UCrop.of(input, Uri.fromFile(new File(externalCacheDir, destinationFileName)));
+        uCrop.withAspectCircle(RxPickerManager.getInstance().getCropOptions()).start(this);
     }
 
     private void loadData() {
@@ -139,7 +162,7 @@ public class PickerFragment extends AbstractFragment<PickerFragmentPresenter> im
     }
 
     private void initPopWindow(List<ImageFolder> data) {
-        new PopWindowManager().init(title, data);
+        new PopWindowManager().init(mImgToggle,title, data);
     }
 
     private void initRecycler() {
@@ -171,6 +194,18 @@ public class PickerFragment extends AbstractFragment<PickerFragmentPresenter> im
         //take camera
         if (resultCode == Activity.RESULT_OK && requestCode == CAMERA_REQUEST) {
             handleCameraResult();
+        }else if(requestCode == UCrop.REQUEST_CROP) {
+            handleCropResult(data);
+        }
+    }
+
+    private void handleCropResult(@NonNull Intent result){
+        if(result != null&&UCrop.getOutputCropPath(result)!=null) {
+            ArrayList<ImageItem> cropedImage = new ArrayList();
+            cropedImage.add(mImageCroped);
+            result.putExtra(MEDIA_RESULT, cropedImage);
+            getActivity().setResult(UCrop.REQUEST_CROP, result);
+            getActivity().finish();
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -11,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -77,5 +79,33 @@ public class CameraHelper {
     Uri contentUri = Uri.fromFile(file);
     mediaScanIntent.setData(contentUri);
     context.sendBroadcast(mediaScanIntent);
+  }
+  /**
+   * 获取图片的旋转角度
+   * @param imagePath 图片的绝对路径
+   */
+  public static int getBitmapDegree(String imagePath) {
+    int degree = 0;
+    try {
+      // 从指定路径下读取图片，并获取其EXIF信息
+      ExifInterface exifInterface = new ExifInterface(imagePath);
+      // 获取图片的旋转信息
+      int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+              ExifInterface.ORIENTATION_NORMAL);
+      switch (orientation) {
+        case ExifInterface.ORIENTATION_ROTATE_90:
+          degree = 90;
+          break;
+        case ExifInterface.ORIENTATION_ROTATE_180:
+          degree = 180;
+          break;
+        case ExifInterface.ORIENTATION_ROTATE_270:
+          degree = 270;
+          break;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return degree;
   }
 }
