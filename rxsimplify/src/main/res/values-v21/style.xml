@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RxPicker.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/rxsimple_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/rxpicker_colorPrimaryDark</item>
+        <item name="colorAccent">@color/rxpicker_colorAccent</item>
+        <item name="android:statusBarColor">@color/rxpicker_colorAccent</item>
+    </style>
+</resources>
